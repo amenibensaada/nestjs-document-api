@@ -1,0 +1,26 @@
+name: API checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build and exercise the production container
+        run: |
+          docker build -t document-api .
+          docker run -d --name document-api -p 127.0.0.1:3000:3000 document-api
+          trap 'docker logs document-api; docker rm -f document-api' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/api/health; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3000/api/health
+          curl --fail --silent -X POST http://127.0.0.1:3000/api/documents -H 'Content-Type: application/json' -d '{"title":"CI document","content":"Container smoke test"}'
