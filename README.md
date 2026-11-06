@@ -1,6 +1,6 @@
 # NestJS Document API
 
-[![API checks](https://github.com/amenibensaada/nestjs-document-api/actions/workflows/ci.yml/badge.svg)](https://github.com/amenibensaada/nestjs-document-api/actions/workflows/ci.yml)
+[CI workflow](https://github.com/amenibensaada/nestjs-document-api/actions/workflows/ci.yml) · 14 HTTP tests verified locally
 
 A small, runnable TypeScript API for storing document text and retrieving document metadata. Created as a portfolio demonstration in November 2026: input validation, predictable HTTP errors, automated API tests and a container delivery workflow.
 
@@ -62,7 +62,7 @@ docker build -t nestjs-document-api .
 docker run --rm -p 127.0.0.1:3000:3000 nestjs-document-api
 ```
 
-The container uses port 3000 internally. The image is checked on the Linux CI runner; the local verification covers TypeScript compilation and HTTP tests.
+The container uses port 3000 internally. The workflow includes Linux container checks. Local verification covers TypeScript compilation and all 14 HTTP tests; hosted checks have not executed because of an account-level Actions restriction.
 
 ## Deliberate limits
 
